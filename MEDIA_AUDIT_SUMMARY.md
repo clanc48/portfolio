@@ -37,4 +37,4 @@ Each visual set follows the supplied 12-brand board: luxury contractor, restaura
 
 ## Verification
 
-`scripts/verify_media.py` checks that every audited site has its manifest, at least eight SVG media assets, and no missing local media URL referenced from its primary stylesheet.
+`scripts/verify_media.py` checks that every audited site has its manifest, at least eight SVG media assets, and no missing local media URL referenced from its primary stylesheet. It also enforces the 1600×1000 responsive viewBox, accessible image semantics, and self-contained, non-executable SVG content with no external media references.
