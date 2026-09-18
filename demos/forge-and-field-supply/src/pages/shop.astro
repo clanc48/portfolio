@@ -1,4 +1,12 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
+const products=[
+ ["Ridge Pack 32L","Trail","$189","Carry system · recycled ripstop · repairable buckles"],
+ ["Forge Camp Knife","Tools","$96","Full tang · micarta scales · field sheath"],
+ ["Storm Layer Shell","Layers","$240","3-layer shell · pit zips · helmet hood"],
+ ["Ember Cook Set","Camp","$78","Nesting steel cookset · two-person kit"],
+ ["Switchback Poles","Trail","$112","Aluminum · cork grips · replaceable tips"],
+ ["Field Repair Roll","Tools","$54","Needles · patches · cord · hardware · tape"]
+];
 ---
-<SiteLayout title="Shop | Forge & Field Supply"><main><section class="page-hero container"><p class="eyebrow">Forge & Field Supply</p><h1>Shop</h1><p>Core equipment chosen for durability, repairability, and useful performance.</p></section><section class="page-grid container"><article class="card"><h2>Durable</h2><p>Materials selected for repeat use, not shelf appeal.</p></article><article class="card"><h2>Repairable</h2><p>Products should stay useful after the first hard season.</p></article><article class="card"><h2>Field-proven</h2><p>Performance is judged outside, not in a studio.</p></article></section></main></SiteLayout>
+<SiteLayout title="Shop | Forge & Field Supply" description="Interactive sample product catalog for the Forge & Field portfolio demo."><section class="page-hero container"><p class="eyebrow">Field-tested essentials</p><h1>Shop</h1><p>Filter the fictional catalog by use case. Product cards prioritize field-relevant specifications over lifestyle copy.</p></section><section class="container"><div class="filterBar" role="group" aria-label="Filter products"><button class="active" data-filter="All">All</button><button data-filter="Camp">Camp</button><button data-filter="Trail">Trail</button><button data-filter="Tools">Tools</button><button data-filter="Layers">Layers</button></div><div class="shopGrid">{products.map(([name,category,price,desc]) => <article class="shopCard" data-category={category}><div class="shopVisual" aria-hidden="true"></div><div class="shopBody"><p class="eyebrow">{category}</p><h2>{name}</h2><p>{desc}</p><strong>{price}</strong></div></article>)}</div></section><script>const buttons=document.querySelectorAll('[data-filter]');const cards=document.querySelectorAll('[data-category]');buttons.forEach(button=>button.addEventListener('click',()=>{const filter=button.getAttribute('data-filter');buttons.forEach(x=>x.classList.remove('active'));button.classList.add('active');cards.forEach(card=>{card.style.display=filter==='All'||card.getAttribute('data-category')===filter?'':'none';});}));</script></SiteLayout>

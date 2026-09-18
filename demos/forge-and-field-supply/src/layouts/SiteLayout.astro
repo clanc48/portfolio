@@ -1,9 +1,7 @@
 ---
 import "../styles/site.css";
-const { title = "Forge & Field Supply" } = Astro.props;
+const { title = "Forge & Field Supply", description = "Portfolio-demo outdoor supply brand focused on durable, repairable field gear." } = Astro.props;
 const nav=[["Shop","/shop"],["Collections","/collections"],["Field Journal","/field-journal"],["Support","/support"]];
+const schema={"@context":"https://schema.org","@type":"Store","name":"Forge & Field Supply","description":"Portfolio demo outdoor-goods brand.","url":"https://example.com/"};
 ---
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title></head><body>
-<header class="header container"><a class="brand" href="/"><span class="peak">▲</span><span>FORGE & FIELD<small>SUPPLY</small></span></a><nav>{nav.map(([label,href]) => <a href={href}>{label}</a>)}</nav><a class="button" href="/shop">Shop gear</a></header>
-<slot />
-<footer><div class="container footer-grid"><div><strong>Forge & Field Supply</strong><p>Trusted gear for wherever you go.</p></div><div>Explore · Equip · Belong</div></div></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><meta name="description" content={description}/><script type="application/ld+json" set:html={JSON.stringify(schema)} /></head><body><a class="skip-link" href="#main">Skip to content</a><header class="header container"><a class="brand" href="/"><span class="peak">▲</span><span>FORGE & FIELD<small>SUPPLY</small></span></a><nav aria-label="Primary">{nav.map(([label,href]) => <a href={href}>{label}</a>)}</nav><a class="button" href="/shop">Shop gear</a></header><main id="main"><slot /></main><footer><div class="container footer-grid"><div><strong>Forge & Field Supply</strong><p>Trusted gear for wherever you go.</p></div><div>Portfolio demo · not a real retailer</div></div></footer></body></html>

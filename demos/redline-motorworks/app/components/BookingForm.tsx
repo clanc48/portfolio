@@ -1,0 +1,7 @@
+"use client";
+import {FormEvent,useState} from 'react';
+export default function BookingForm(){
+ const [done,setDone]=useState(false);
+ function submit(e:FormEvent){e.preventDefault();setDone(true)}
+ return <form className="bookingForm" onSubmit={submit}><label>Year<input required inputMode="numeric" placeholder="2021"/></label><label>Make / model<input required placeholder="Ford Mustang GT"/></label><label className="full">Current modifications<textarea rows={4} placeholder="Intake, exhaust, fuel system, calibration, suspension, etc."/></label><label>Goal<select><option>Diagnose a problem</option><option>Street performance</option><option>Track preparation</option><option>Complete build plan</option></select></label><label>Fuel<select><option>91/93 octane</option><option>E85 / ethanol blend</option><option>Race fuel</option><option>Not sure</option></select></label><label className="full">Symptoms or target<textarea required rows={5} placeholder="Describe what the car is doing now or what you want it to do."/></label><button className="button" type="submit">Submit build brief</button>{done&&<p className="status" role="status">Demo brief complete. No service appointment was created.</p>}</form>
+}

@@ -1,9 +1,10 @@
 from django.urls import path
-from .views import render_page
+from .views import page, services, request_service
+
 urlpatterns = [
-    path('', render_page('home.html'), name='home'),
-    path('services/', render_page('services.html'), name='services'),
-    path('service-areas/', render_page('service-areas.html'), name='service-areas'),
-    path('reviews/', render_page('reviews.html'), name='reviews'),
-    path('request-service/', render_page('request-service.html'), name='request-service'),
+    path("", page("home.html"), name="home"),
+    path("services/", services, name="services"),
+    path("service-areas/", page("service-areas.html"), name="service-areas"),
+    path("reviews/", page("reviews.html"), name="reviews"),
+    path("request-service/", request_service, name="request-service"),
 ]

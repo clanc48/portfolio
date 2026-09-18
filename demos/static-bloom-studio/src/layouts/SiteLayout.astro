@@ -1,9 +1,7 @@
 ---
 import "../styles/site.css";
-const { title = "Static Bloom Studio" } = Astro.props;
+const { title = "Static Bloom Studio", description = "Portfolio-demo creative studio for identity, digital experiences, and motion systems." } = Astro.props;
 const nav=[["Work","/work"],["Services","/services"],["Studio","/studio"],["Contact","/contact"]];
+const schema={"@context":"https://schema.org","@type":"ProfessionalService","name":"Static Bloom Studio","description":"Portfolio demo creative-agency brand.","url":"https://example.com/"};
 ---
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title></head><body>
-<header class="header container"><a class="brand" href="/"><span class="flower">✣</span><span>STATIC BLOOM<small>STUDIO</small></span></a><nav>{nav.map(([label,href]) => <a href={href}>{label}</a>)}</nav></header>
-<slot />
-<footer><div class="container footer-grid"><div><strong>STATIC BLOOM STUDIO</strong><p>Ideas in motion.</p></div><div>Brands · Experiences · Culture</div></div></footer></body></html>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{title}</title><meta name="description" content={description}/><script type="application/ld+json" set:html={JSON.stringify(schema)} /></head><body><a class="skip-link" href="#main">Skip to content</a><header class="header container"><a class="brand" href="/"><span class="flower">✣</span><span>STATIC BLOOM<small>STUDIO</small></span></a><nav aria-label="Primary">{nav.map(([label,href]) => <a href={href}>{label}</a>)}</nav></header><main id="main"><slot /></main><footer><div class="container footer-grid"><div><strong>STATIC BLOOM STUDIO</strong><p>Ideas in motion.</p></div><div>Portfolio demo · not a real agency</div></div></footer></body></html>
