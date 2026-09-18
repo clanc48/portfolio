@@ -1,0 +1,4 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>@yield('title','Hale Mercer Legal')</title><link rel="stylesheet" href="/css/site.css"></head><body>
+<header class="header container"><a class="brand" href="/"><span class="monogram">HM</span><span>HALE MERCER<small>LEGAL</small></span></a><nav><a href="/practice-areas">Practice Areas</a><a href="/attorneys">Attorneys</a><a href="/insights">Insights</a></nav><a class="button" href="/consultation">Request consultation</a></header>
+@yield('content')
+<footer><div class="container footer-grid"><div><strong>Hale Mercer Legal</strong><p>People. Perspective. Results.</p></div><div><p>Strategic counsel for consequential decisions.</p></div></div></footer></body></html>

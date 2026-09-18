@@ -1,0 +1,21 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>{% block title %}Blackridge Build Co.{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'site.css' %}">
+</head>
+<body>
+  <header class="site-header container">
+    <a class="brand" href="/"><span class="mark">B</span><span>BLACKRIDGE<br>BUILD CO.</span></a>
+    <nav aria-label="Primary">
+      <a href="/projects/">Projects</a><a href="/services/">Services</a><a href="/process/">Process</a><a href="/contact/">Contact</a>
+    </nav>
+    <a class="button button-ghost" href="/contact/">Start a project</a>
+  </header>
+  {% block content %}{% endblock %}
+  <footer class="site-footer container"><div><strong>Blackridge Build Co.</strong><p>Custom homes. Lasting legacies.</p></div><div><p>Built with restraint, precision, and permanence.</p></div></footer>
+</body>
+</html>

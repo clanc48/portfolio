@@ -1,4 +1,2 @@
-import type { ReactNode } from 'react';
-import Link from 'next/link';
-const nav = [["Home","/"],["Properties","/properties"],["Neighborhoods","/neighborhoods"],["Agents","/agents"],["Contact","/contact"]] as const;
-export default function RootLayout({children}:{children:ReactNode}){return <html lang='en'><body><header><strong>Juniper Row Realty</strong><nav>{nav.map(([label,href])=><Link key={href} href={href} style={{marginRight:16}}>{label}</Link>)}</nav></header>{children}</body></html>}
+import type { ReactNode } from 'react';import Link from 'next/link';import './globals.css';
+const nav=[['Properties','/properties'],['Neighborhoods','/neighborhoods'],['Agents','/agents']] as const;export default function RootLayout({children}:{children:ReactNode}){return <html lang='en'><body><header className='header container'><Link className='brand' href='/'>JUNIPER ROW<small>REALTY</small></Link><nav className='nav'>{nav.map(([l,h])=><Link key={h} href={h}>{l}</Link>)}</nav><Link className='button' href='/contact'>Talk with an agent</Link></header>{children}<footer className='footer container'><div><strong>Juniper Row Realty</strong><p>A more thoughtful way home.</p></div><div>Homes · Neighborhoods · Lives</div></footer></body></html>}

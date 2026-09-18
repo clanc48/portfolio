@@ -1,0 +1,2 @@
+<script lang="ts">import '../app.css'; let { children } = $props();</script>
+<header class="header container"><a class="brand" href="/"><span class="orbit"></span><span>OrbitStack</span></a><nav><a href="/product">Product</a><a href="/solutions">Solutions</a><a href="/pricing">Pricing</a><a href="/docs">Docs</a></nav><a class="button" href="/pricing">Start building</a></header>{@render children()}<footer class="footer container"><div><strong>OrbitStack</strong><p>The modern stack for what’s next.</p></div><div>Build · Scale · Observe</div></footer>

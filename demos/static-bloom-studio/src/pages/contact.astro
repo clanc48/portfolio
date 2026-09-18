@@ -1,4 +1,4 @@
 ---
-const title = 'Contact';
+import SiteLayout from "../layouts/SiteLayout.astro";
 ---
-<html lang='en'><head><meta charset='utf-8'><title>{title} | Static Bloom Studio</title></head><body><main><h1>{title}</h1><p>Wave 1 Astro page shell.</p></main></body></html>
+<SiteLayout title="Contact | Static Bloom Studio"><main><section class="pageHero container"><p style="font-family:var(--mono);font-weight:700">STATIC BLOOM / CONTACT</p><h1>Contact</h1><p>Bring the problem, the ambition, and the thing everyone else is avoiding.</p></section><section class="pageGrid container"><article class="card"><h2>STRATEGY</h2><p>Decide what deserves attention.</p></article><article class="card"><h2>SYSTEM</h2><p>Build rules strong enough to stay recognizable.</p></article><article class="card"><h2>MOTION</h2><p>Give the identity behavior, not just assets.</p></article></section></main></SiteLayout>

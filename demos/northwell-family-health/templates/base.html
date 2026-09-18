@@ -1,0 +1,4 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{% block title %}Northwell Family Health{% endblock %}</title><link rel="stylesheet" href="{{ url_for('static', filename='site.css') }}"></head><body>
+<header class="site-header container"><a class="brand" href="/"><span class="mark">+</span><span>Northwell<br><small>Family Health</small></span></a><nav><a href="/services">Services</a><a href="/providers">Providers</a><a href="/patient-resources">Patient Resources</a></nav><a class="button" href="/appointments">Appointments</a></header>
+{% block content %}{% endblock %}
+<footer><div class="container footer-grid"><div><strong>Northwell Family Health</strong><p>Care for every stage.</p></div><div><p>Primary care designed around families, clarity, and continuity.</p></div></div></footer></body></html>
