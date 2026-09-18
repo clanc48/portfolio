@@ -37,3 +37,16 @@ Once runner execution is available, a valid qualification run must show actual s
 2. Python dependency installation and HTTP smoke tests,
 3. Node dependency installation and production framework builds,
 4. Composer installation, Laravel boot, route listing, Blade compilation, and HTTP smoke rendering.
+
+
+## Media completion update
+
+As of commit `d1d79bffa621ca82eabec3bf2a21e68afd00aabd`, the 12 demo sites have:
+- 96 unique brand-aligned SVG media assets,
+- 147 deliberate media placements across the 60 portfolio pages,
+- per-site media manifests,
+- stylesheet wiring with verified local asset references.
+
+GitHub Actions run 22 for `d1d79bffa621ca82eabec3bf2a21e68afd00aabd` reproduced the existing infrastructure condition: all 13 jobs reported `runner_id: 0`, empty runner names, and zero executed steps. That remains runner-provisioning evidence, not an application-build result.
+
+Media implementation is complete. Full Wave 4 build qualification remains pending an Actions runner actually executing the workflow steps.
