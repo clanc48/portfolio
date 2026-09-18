@@ -1,0 +1,92 @@
+name: Portfolio Build Qualification
+
+on:
+  push:
+    branches: ["wave-*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  structure:
+    name: Structural contracts
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python scripts/verify_wave3.py
+      - run: python scripts/verify_wave4.py
+
+  python:
+    name: Python / ${{ matrix.site }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        site:
+          - blackridge-build-co
+          - clearspring-plumbing
+          - northwell-family-health
+          - open-table-project
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: demos/${{ matrix.site }}/requirements.txt
+      - name: Install
+        run: python -m pip install --disable-pip-version-check -r demos/${{ matrix.site }}/requirements.txt
+      - name: Framework smoke
+        run: python scripts/smoke_python.py ${{ matrix.site }}
+
+  node:
+    name: Node build / ${{ matrix.site }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        site:
+          - ember-and-thyme
+          - juniper-row-realty
+          - redline-motorworks
+          - forge-and-field-supply
+          - static-bloom-studio
+          - orbitstack
+          - the-alder-house
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install exact direct dependencies
+        run: cd demos/${{ matrix.site }} && npm install --no-audit --no-fund
+      - name: Production build
+        run: cd demos/${{ matrix.site }} && npm run build
+
+  php:
+    name: Laravel build / hale-mercer-legal
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+      - name: Install
+        run: |
+          cd demos/hale-mercer-legal
+          cp .env.example .env
+          composer install --no-interaction --prefer-dist --no-progress
+          php artisan key:generate --force
+      - name: Bootstrap and route qualification
+        run: |
+          cd demos/hale-mercer-legal
+          php artisan route:list
+          php artisan view:cache
+          php artisan demo:status
+          php tests/smoke.php

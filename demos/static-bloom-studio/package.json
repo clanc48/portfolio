@@ -2,12 +2,15 @@
   "name": "static-bloom-studio",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview"
   },
   "dependencies": {
-    "astro": "^5.13.0"
+    "astro": "5.13.0"
   }
 }

@@ -1,0 +1,13 @@
+**/node_modules/
+**/.next/
+**/dist/
+**/.astro/
+**/.svelte-kit/
+**/.nuxt/
+**/.output/
+**/__pycache__/
+**/*.py[cod]
+**/.pytest_cache/
+**/vendor/
+**/.env
+.DS_Store
