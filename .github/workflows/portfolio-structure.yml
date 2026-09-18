@@ -1,8 +1,11 @@
-name: Portfolio Structure
+name: Portfolio Structure (Manual Legacy Check)
+
 on:
-  push:
-    branches: ["wave-*", "digital-forge"]
-  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -11,5 +14,5 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Verify portfolio architecture
-        run: python scripts/verify_wave3.py
+      - run: python scripts/verify_wave3.py
+      - run: python scripts/verify_wave4.py
