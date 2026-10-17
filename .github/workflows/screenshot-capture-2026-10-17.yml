@@ -5,14 +5,16 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   capture:
+    if: ${{ github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip media-export]') }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
       fail-fast: false
+      max-parallel: 1
       matrix:
         include:
           - slug: ember-and-thyme
@@ -62,3 +64,39 @@ jobs:
           name: portfolio-${{ matrix.slug }}-screenshots
           path: screenshots/
           if-no-files-found: error
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Export selected media payloads
+        run: |
+          python -m pip install pillow
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import base64, os
+          slug = os.environ["DEMO_SLUG"]
+          src = Path("screenshots") / f"{slug}-desktop.png"
+          out = Path(".media-export")
+          out.mkdir(exist_ok=True)
+          im = Image.open(src).convert("RGB")
+          w, h = im.size
+          crop_h = min(h, round(w * 9 / 16))
+          im = im.crop((0, 0, w, crop_h))
+          if im.width > 1000:
+              nh = round(im.height * 1000 / im.width)
+              im = im.resize((1000, nh), Image.Resampling.LANCZOS)
+          webp = out / f"{slug}.webp"
+          im.save(webp, "WEBP", quality=68, method=6)
+          (out / f"{slug}.webp.b64").write_text(base64.b64encode(webp.read_bytes()).decode("ascii"), encoding="ascii")
+          webp.unlink()
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .media-export
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(media): export $DEMO_SLUG screenshot payload [skip media-export]"
+            git pull --rebase origin media/screenshots-2026-10-17
+            git push origin HEAD:media/screenshots-2026-10-17
+          fi
+        env:
+          DEMO_SLUG: ${{ matrix.slug }}
