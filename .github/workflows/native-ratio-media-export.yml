@@ -1,0 +1,61 @@
+name: Native Ratio Media Export
+on:
+  push:
+    branches: [media/screenshots-2026-10-17]
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  export:
+    if: "${{ github.event_name == 'workflow_dispatch' || !contains(github.event.head_commit.message, '[skip nocrop-export]') }}"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - name: Download verified concept artifacts
+        env: {GH_TOKEN: "${{ github.token }}"}
+        run: |
+          mkdir -p /tmp/screens/forge /tmp/screens/orbit /tmp/screens/static /tmp/screens/ember
+          gh api repos/${{ github.repository }}/actions/artifacts/12107731412/zip > /tmp/forge.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/12107039649/zip > /tmp/orbit.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/12107372963/zip > /tmp/static.zip
+          gh api repos/${{ github.repository }}/actions/artifacts/12107347681/zip > /tmp/ember.zip
+          unzip -q /tmp/forge.zip -d /tmp/screens/forge
+          unzip -q /tmp/orbit.zip -d /tmp/screens/orbit
+          unzip -q /tmp/static.zip -d /tmp/screens/static
+          unzip -q /tmp/ember.zip -d /tmp/screens/ember
+      - name: Export native-ratio concept media
+        run: |
+          python -m pip install pillow
+          python - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import base64
+          targets=[
+              (Path("/tmp/screens/forge"),"forge-and-field-supply-desktop.png","forge-and-field-supply"),
+              (Path("/tmp/screens/orbit"),"orbitstack-desktop.png","orbitstack"),
+              (Path("/tmp/screens/static"),"static-bloom-studio-desktop.png","static-bloom-studio"),
+              (Path("/tmp/screens/ember"),"ember-and-thyme-desktop.png","ember-and-thyme"),
+          ]
+          out=Path(".media-export-nocrop"); out.mkdir(exist_ok=True)
+          for root,filename,name in targets:
+              p=list(root.rglob(filename))[0]
+              im=Image.open(p).convert("RGB"); w,h=im.size
+              if h>1000: im=im.crop((0,0,w,1000))
+              if im.width>1200:
+                  nh=round(im.height*1200/im.width); im=im.resize((1200,nh),Image.Resampling.LANCZOS)
+              webp=out/f"{name}.webp"; im.save(webp,"WEBP",quality=78,method=6)
+              (out/f"{name}.webp.b64").write_text(base64.b64encode(webp.read_bytes()).decode("ascii"),encoding="ascii"); webp.unlink()
+          PY
+      - name: Commit payload
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .media-export-nocrop
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(media): export native-ratio concepts [skip nocrop-export]"
+            git pull --rebase origin media/screenshots-2026-10-17
+            git push origin HEAD:media/screenshots-2026-10-17
+          fi
