@@ -1,0 +1,64 @@
+name: Portfolio Demo Screenshot Capture 2026-10-17
+on:
+  push:
+    branches: [media/screenshots-2026-10-17]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - slug: ember-and-thyme
+            kind: next
+          - slug: forge-and-field-supply
+            kind: preview
+          - slug: juniper-row-realty
+            kind: next
+          - slug: orbitstack
+            kind: preview
+          - slug: redline-motorworks
+            kind: next
+          - slug: static-bloom-studio
+            kind: preview
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install and build
+        working-directory: demos/${{ matrix.slug }}
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+          npm run build
+      - name: Start demo
+        working-directory: demos/${{ matrix.slug }}
+        run: |
+          if [ "${{ matrix.kind }}" = "next" ]; then
+            npm run start -- -H 127.0.0.1 -p 4173 > /tmp/demo.log 2>&1 &
+          else
+            npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/demo.log 2>&1 &
+          fi
+          for i in {1..60}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/demo.log
+          exit 1
+      - name: Capture authentic demo
+        run: |
+          mkdir -p screenshots
+          CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=1600,1000 --screenshot=screenshots/${{ matrix.slug }}-desktop.png http://127.0.0.1:4173/
+          "$CHROME" --headless=new --no-sandbox --disable-gpu --hide-scrollbars --window-size=430,932 --screenshot=screenshots/${{ matrix.slug }}-mobile.png http://127.0.0.1:4173/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portfolio-${{ matrix.slug }}-screenshots
+          path: screenshots/
+          if-no-files-found: error
